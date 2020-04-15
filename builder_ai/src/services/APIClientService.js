@@ -1,5 +1,6 @@
-import config from "../config/config";
-import { Alert, NetInfo } from "react-native";
+
+import { Alert } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 export function APIClientService(
   _methodType,
   _endPoint,
@@ -9,18 +10,20 @@ export function APIClientService(
   isFullURLPass
 ) {
 
-  var URL = config.BASE_URL + _endPoint;
-  if(isFullURLPass){
-    console.log("isFullURLPass--"+isFullURLPass);
-    URL =  _endPoint;
+  // var URL = config.BASE_URL + _endPoint;
+  const BASE_URL = "https://hn.algolia.com/api/v1/search_by_date?tags=story&page=";
+  const URL = BASE_URL + _endPoint
+  if (isFullURLPass) {
+    console.log("isFullURLPass--" + isFullURLPass);
+    URL = _endPoint;
   }
   console.log(
     "MethodType-" +
-      _methodType +
-      "\nAPI URL-->" +
-      URL +
-      "\nAPI Input-->" +
-      JSON.stringify(_inputParam)
+    _methodType +
+    "\nAPI URL-->" +
+    URL +
+    "\nAPI Input-->" +
+    JSON.stringify(_inputParam)
   );
   var apiConfig = {
     method: _methodType,
@@ -32,28 +35,23 @@ export function APIClientService(
     apiConfig["body"] = JSON.stringify(_inputParam);
   }
 
-  NetInfo.isConnected.fetch().done(isConnected => {
-    // console.log(
-    //   "MethodType-" +
-    //     _methodType +
-    //     "\nAPI URL-->" +
-    //     URL +
-    //     "\nAPI Input-->" +
-    //     JSON.stringify(_inputParam)
-    // );
-    if (isConnected) {
+  NetInfo.fetch().then(state => {
+    console.log("Connection type", state.type);
+    console.log("Is connected?", state.isConnected);
+
+    if (state.isConnected) {
       fetch(URL, apiConfig)
         .then(response => response.json())
         .then(responseJson => {
           console.log(
             "MethodType-" +
-              _methodType +
-              "\nAPI URL-->" +
-              URL +
-              "\nAPI Input-->" +
-              JSON.stringify(_inputParam) +
-              "\nService Response-->" +
-              JSON.stringify(responseJson)
+            _methodType +
+            "\nAPI URL-->" +
+            URL +
+            "\nAPI Input-->" +
+            JSON.stringify(_inputParam) +
+            "\nService Response-->" +
+            JSON.stringify(responseJson)
           );
           if (_onSuccessCallback) {
             _onSuccessCallback(responseJson);
@@ -62,15 +60,15 @@ export function APIClientService(
         .catch(error => {
           console.log(
             "ERROR - MethodType-" +
-              _methodType +
-              "\nAPI URL-->" +
-              URL +
-              "\nAPI Input-->" +
-              JSON.stringify(_inputParam) +
-              +"\nService status-->" +
-              error.status +
-              "\nService error-->" +
-              JSON.stringify(error)
+            _methodType +
+            "\nAPI URL-->" +
+            URL +
+            "\nAPI Input-->" +
+            JSON.stringify(_inputParam) +
+            +"\nService status-->" +
+            error.status +
+            "\nService error-->" +
+            JSON.stringify(error)
           );
 
           if (_onErrorCallback) {

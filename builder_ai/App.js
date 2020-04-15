@@ -1,51 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import Posts from './src/containers/PostsContainer';
+import store from './src/store';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
- 
-  StatusBar,
-} from 'react-native';
-
- import { APIClientService } from "./services/APIClientService";
- 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-       
-          
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Posts />
+      </Provider>
+    );
   }
-  
-});
-
-export default App;
+}
