@@ -39,7 +39,7 @@ function _renderRow(row) {
       <View style={styles.row}>
         <Text style={styles.title}>{row.item.title}</Text>
         <Text style={styles.desc}>Author - {row.item.author}</Text>
-        <Text style={styles.desc}>Author - {row.item.created_at}</Text>
+        <Text style={styles.desc}>Date - {row.item.created_at}</Text>
       </View>
     )
   }
